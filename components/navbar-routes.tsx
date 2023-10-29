@@ -7,7 +7,8 @@ import { usePathname } from "next/navigation";
 import { buttonVariants } from "./ui/button";
 import { cn } from "@/lib/utils";
 import { LogIn } from 'lucide-react';
-
+import { BookOpenIcon } from "lucide-react";
+import { Profilebutton } from "./User-Profile-Button";
 
 export const Navbarroutes = ()=>{
     const session = useSession();
@@ -20,21 +21,23 @@ export const Navbarroutes = ()=>{
     
 
     if(name || isCoursePage || isTeacherPage){
-        return(
-    <div>hello</div>
+        return(<div className="absolute right-22 top-4 md:right-16 md:top-6">
+       <Profilebutton />
+       </div>
             )
-    }else{
+    }
+    else{
         return(<>
-         <Link
-          href='/studentauth/signin'
+             <Link
+          href='/teacherauth/signin'
           
           className={cn(
             buttonVariants({ variant: "outline" }),
-            "absolute right-3 top-4 md:right-8 md:top-6 "
+            "absolute right-32 top-4 md:right-32 md:top-6 "
           )}
         >
-        <LogIn size={19} />
-          Login
+        <BookOpenIcon size={19} className="pr-1"/>
+          Teacher Login
         </Link>
             <Link
           href='/studentauth/signin'
@@ -44,7 +47,7 @@ export const Navbarroutes = ()=>{
             "absolute right-4 top-4 md:right-8 md:top-6 "
           )}
         >
-        <LogIn size={19} />
+        <LogIn size={19} className="pr-1"/>
           Login
         </Link>
         </>

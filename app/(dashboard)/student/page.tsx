@@ -1,5 +1,7 @@
-export const Home = ()=>{
+ const Home = ()=>{
     return(
-        <div>hello from student</div>
+        <div className=" pt-32 flex justify-center">hello from student</div>
     )
 }
+
+export default Home;

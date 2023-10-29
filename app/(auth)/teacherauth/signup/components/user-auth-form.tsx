@@ -1,17 +1,25 @@
 "use client"
 
 import * as React from "react"
-
+import axios from "axios";
 import { cn } from "@/lib/utils"
 import { Icons } from "@/components/icons"
 import { Button } from "@/components//ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
+
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
+  const router = useRouter();
+  const [name ,setName] = React.useState("");
+  const [email ,setEmail] = React.useState("");
+  const [password,setPassword] = React.useState("");
+
 
   async function onSubmit(event: React.SyntheticEvent) {
     event.preventDefault()
@@ -38,11 +46,17 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               autoComplete="email"
               autoCorrect="off"
               disabled={isLoading}
+              onChange={(e) => {
+              setEmail(e.target.value);
+                                }}
             />
         <Label htmlFor="name">username</Label>
             <Input
               id="name"
               placeholder="Monkey D. Luffy"
+              onChange={(e) => {
+                setName(e.target.value);
+                                  }}
             />
            <p className="text-sm text-muted-foreground">
                 This is your public display name.
@@ -53,9 +67,30 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
             <Input
               id="password"
               type="password"
+              onChange={(e) => {
+                setPassword(e.target.value);
+                                  }}
             />
           </div>
-          <Button disabled={isLoading} className="hoover:bg-white hoover:text-black">
+          <Button disabled={isLoading} className="hoover:bg-white hoover:text-black" onClick={() => {
+      axios.post(`/api/register/teacher`, {
+        name: name,
+        email: email,
+        password: password
+    }).then((response)=>{
+    signIn('user', { redirect: false, username:email,password:password})
+      .then((callback) => {
+        if (callback?.error) {
+          console.error('Invalid credentials!');
+        }
+  
+        if (callback?.ok) {
+          router.push('/student')
+        }
+      })
+    });
+  }}
+    >
             {isLoading && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
             )}

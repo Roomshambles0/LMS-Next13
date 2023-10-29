@@ -11,6 +11,15 @@ datasource db {
 }
 
 
+model Teacher {
+  id               Int     @id @default(autoincrement())
+  email            String  @unique
+  name             String?
+  hashedpassword   String
+  role             Role @default(ADMIN)
+}
+
+
 model Account {
   id                 String    @id @default(cuid())
   userId             String
