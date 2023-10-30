@@ -15,6 +15,7 @@ import { Label } from "@/components/ui/label";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { signIn } from "next-auth/react";
+import toast from "react-hot-toast";
 
 export function CreateAccount() {
   const router = useRouter();
@@ -24,7 +25,7 @@ export function CreateAccount() {
   return (
     <Card>
       <CardHeader className="space-y-1">
-        <CardTitle className="text-2xl">Teacher Sign in</CardTitle>
+        <CardTitle className="text-2xl">Sign in to your account</CardTitle>
         <CardDescription>
           Enter your email below to create your account
         </CardDescription>
@@ -68,7 +69,7 @@ export function CreateAccount() {
       signIn('user', { redirect: false, username:email,password:password})
       .then((callback) => {
         if (callback?.error) {
-          console.error('Invalid credentials!');
+          toast.error('Invalid credentials');
         }
 
         if (callback?.ok) {

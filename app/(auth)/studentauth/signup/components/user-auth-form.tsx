@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
+import toast from "react-hot-toast";
 
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
@@ -78,6 +79,8 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         email: email,
         password: password
     }).then((response)=>{
+  
+    toast.success("account created successfully")
     signIn('user', { redirect: false, username:email,password:password})
       .then((callback) => {
         if (callback?.error) {
@@ -88,8 +91,10 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           router.push('/student')
         }
       })
-    });
-  }}
+    }).catch((e) =>{ 
+      console.log(e);
+    toast.error(e.response.data.message);
+          })}}
     >
             {isLoading && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />

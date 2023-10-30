@@ -15,7 +15,7 @@ export async function POST(
         const parsedadminInput =  studentInput.safeParse(body);
         if(!parsedadminInput.success){
             console.log(parsedadminInput.error)
-           return NextResponse.json({"message":"add correct Input"});
+           return NextResponse.json({"message":"add correct Input"} ,{status:401});
         }
        
     
@@ -34,10 +34,10 @@ export async function POST(
         if(user){
         return NextResponse.json({message:"Account created successfully",name});
     }else{
-        return NextResponse.json({message:"take another username "},{status:401});
+        return NextResponse.json({"message":"take another username "},{status:401});
     }
     }catch (error) {
         console.error(error);
-       return NextResponse.json({ message: "internal server error" });
+       return NextResponse.json({ message: "take another username " },{status:500});
       }
 }
