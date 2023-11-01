@@ -21,7 +21,7 @@ export const Navbarroutes = ()=>{
     
 
     if(name || isCoursePage || isTeacherPage){
-        return(<div className="absolute right-22 top-4 md:right-16 md:top-6">
+        return(<div className="absolute right-8  top-4 md:right-16 md:top-6">
        <Profilebutton />
        </div>
             )

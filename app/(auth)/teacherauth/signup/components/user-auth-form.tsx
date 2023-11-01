@@ -85,7 +85,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         }
   
         if (callback?.ok) {
-          router.push('/student')
+          router.push('/teacher/create')
         }
       })
     });
