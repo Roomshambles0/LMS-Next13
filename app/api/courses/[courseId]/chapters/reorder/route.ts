@@ -1,25 +1,27 @@
-import { auth } from "@clerk/nextjs";
+
+import { getCurrentAdmin } from "@/app/actions/getCurrentAdmin";
+import { Pclient } from "@/lib/prismadb";
 import { NextResponse } from "next/server";
 
-import { db } from "@/lib/db";
+
 
 export async function PUT(
   req: Request,
   { params }: { params: { courseId: string; } }
 ) {
   try {
-    const { userId } = auth();
+  const teacher = await getCurrentAdmin()
 
-    if (!userId) {
+    if (!teacher) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
     const { list } = await req.json();
 
-    const ownCourse = await db.course.findUnique({
+    const ownCourse = await Pclient.course.findUnique({
       where: {
         id: params.courseId,
-        userId: userId
+        teacherId:teacher.id
       }
     });
 
@@ -28,7 +30,7 @@ export async function PUT(
     }
 
     for (let item of list) {
-      await db.chapter.update({
+      await Pclient.chapter.update({
         where: { id: item.id },
         data: { position: item.position }
       });

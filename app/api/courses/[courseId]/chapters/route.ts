@@ -1,24 +1,26 @@
-import { auth } from "@clerk/nextjs";
+
+import { getCurrentAdmin } from "@/app/actions/getCurrentAdmin";
+import { Pclient } from "@/lib/prismadb";
 import { NextResponse } from "next/server";
 
-import { db } from "@/lib/db";
+
 
 export async function POST(
   req: Request,
   { params }: { params: { courseId: string } }
 ) {
   try {
-    const { userId } = auth();
+   const teacher = await getCurrentAdmin();
     const { title } = await req.json();
 
-    if (!userId) {
+    if (!teacher) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    const courseOwner = await db.course.findUnique({
+    const courseOwner = await Pclient.course.findUnique({
       where: {
         id: params.courseId,
-        userId: userId,
+        teacherId:teacher.id,
       }
     });
 
@@ -26,7 +28,7 @@ export async function POST(
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    const lastChapter = await db.chapter.findFirst({
+    const lastChapter = await Pclient.chapter.findFirst({
       where: {
         courseId: params.courseId,
       },
@@ -37,7 +39,7 @@ export async function POST(
 
     const newPosition = lastChapter ? lastChapter.position + 1 : 1;
 
-    const chapter = await db.chapter.create({
+    const chapter = await Pclient.chapter.create({
       data: {
         title,
         courseId: params.courseId,
