@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
-
+import { toast } from "react-hot-toast";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -85,7 +85,8 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         }
   
         if (callback?.ok) {
-          router.push('/teacher/create')
+           router.push('/teacher/create')
+        
         }
       })
     });
@@ -117,7 +118,17 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         )}{" "}
         Github
       </Button>
-      <Button variant="outline" type="button" disabled={isLoading}>
+      <Button variant="outline" type="button" disabled={isLoading} onClick={ ()=>{signIn("google", { redirect: false })
+      .then((callback) => {
+        if (callback?.error) {
+          toast.error('Invalid credentials!');
+        }
+
+        if (callback?.ok) {
+         // router.push('/courses')
+         console.log("ok")
+        }
+      })}}>
         {isLoading ? (
           <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
         ) : (

@@ -18,9 +18,15 @@ export const authOptions :AuthOptions = {
     }
     ),
         GoogleProvider({
-          clientId: process.env.GOOGLE_CLIENT_ID as string,
-          clientSecret: process.env.GOOGLE_CLIENT_SECRET as string
-        }),  CredentialsProvider({
+          clientId: process.env.NEXT_GOOGLE_CLIENT_ID as string,
+          clientSecret: process.env.NEXT_GOOGLE_CLIENT_SECRET as string,
+          
+            profile(profile) {
+                console.log(profile);
+              return profile
+            }
+        }
+    ),  CredentialsProvider({
             id: "admin",
             name: "admin Credentials",
             type: "credentials",
