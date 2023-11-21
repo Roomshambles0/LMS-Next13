@@ -62,7 +62,7 @@ const teacher = await getCurrentAdmin()
           label="This chapter is unpublished. It will not be visible in the course"
         />
       )}
-      <div className="p-6">
+      <div className=" mt-32 p-6 md:ml-60">
         <div className="flex items-center justify-between">
           <div className="w-full">
             <Link
