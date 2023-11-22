@@ -2,7 +2,7 @@ import { Pclient } from "@/lib/prismadb";
 import getSession from "./getSession";
 
 
-const getCurrentUser = async () => {
+export const getCurrentUser = async () => {
     try {
       const session = await getSession();
   
@@ -26,4 +26,4 @@ const getCurrentUser = async () => {
     }
   };
   
-  export default getCurrentUser;
+  
