@@ -1,5 +1,5 @@
 import { Pclient } from "@/lib/prismadb";
-import getCurrentUser from "./getCurrentUser";
+import {getCurrentUser} from "./getCurrentUser";
 
 
 export const getCurrentAdmin = async ()=>{

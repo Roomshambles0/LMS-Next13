@@ -15,7 +15,6 @@ const courses = async()=>{
     
     const teacher = await getCurrentAdmin();
     if(!teacher){
-        toast.error("User not found")
          return redirect("/")
     }
     const Course = await Pclient.course.findMany({
@@ -32,9 +31,7 @@ const courses = async()=>{
     return(
         <>
     <div className=" md:ml-60 ml-4 mt-24">
-       <Link href="/teacher/create">
-       <Button>New Course</Button>
-       </Link> 
+     
         <div className="container mx-auto py-10">
       <DataTable columns={columns} data={Course} />
     </div>

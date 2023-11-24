@@ -38,8 +38,8 @@ const SearchPage = async ({
   });
 
   return (
-    <>
-      <div className="px-6 pt-6 md:hidden md:mb-0 block">
+    <div className="md:ml-60 ml-4 mt-24">
+      <div className=" px-2 md:mb-0 block">
         <SearchInput />
       </div>
       <div className="p-6 space-y-4">
@@ -48,7 +48,7 @@ const SearchPage = async ({
         />
         <CoursesList items={courses} />
       </div>
-    </>
+    </div>
    );
 }
  
