@@ -1,29 +1,29 @@
 import Stripe from "stripe";
-import { currentUser } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 
-import { db } from "@/lib/db";
 import { stripe } from "@/lib/stripe";
+import { getCurrentUser } from "@/app/actions/getCurrentUser";
+import { Pclient } from "@/lib/prismadb";
 
 export async function POST(
   req: Request,
   { params }: { params: { courseId: string } }
 ) {
   try {
-    const user = await currentUser();
+   const user = await getCurrentUser();
 
-    if (!user || !user.id || !user.emailAddresses?.[0]?.emailAddress) {
+    if (!user || !user.id || !user.email) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    const course = await db.course.findUnique({
+    const course = await Pclient.course.findUnique({
       where: {
         id: params.courseId,
         isPublished: true,
       }
     });
 
-    const purchase = await db.purchase.findUnique({
+    const purchase = await Pclient.purchase.findUnique({
       where: {
         userId_courseId: {
           userId: user.id,
@@ -54,7 +54,7 @@ export async function POST(
       }
     ];
 
-    let stripeCustomer = await db.stripeCustomer.findUnique({
+    let stripeCustomer = await Pclient.stripeCustomer.findUnique({
       where: {
         userId: user.id,
       },
@@ -65,10 +65,10 @@ export async function POST(
 
     if (!stripeCustomer) {
       const customer = await stripe.customers.create({
-        email: user.emailAddresses[0].emailAddress,
+        email: user.email,
       });
 
-      stripeCustomer = await db.stripeCustomer.create({
+      stripeCustomer = await Pclient.stripeCustomer.create({
         data: {
           userId: user.id,
           stripeCustomerId: customer.id,

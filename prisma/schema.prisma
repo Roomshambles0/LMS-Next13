@@ -183,3 +183,13 @@ model UserProgress {
   @@index([chapterId])
   @@unique([userId, chapterId])
 }
+
+
+model StripeCustomer {
+  id String @id @default(uuid())
+  userId String @unique
+  stripeCustomerId String @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

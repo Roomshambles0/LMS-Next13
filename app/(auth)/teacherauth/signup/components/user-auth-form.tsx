@@ -125,7 +125,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         }
 
         if (callback?.ok) {
-         // router.push('/courses')
+         router.push('/teacher/courses')
          console.log("ok")
         }
       })}}>

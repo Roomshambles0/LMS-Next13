@@ -73,7 +73,7 @@ export function CreateAccount() {
         }
 
         if (callback?.ok) {
-          router.push('/student')
+          router.push('/')
         }
       })
 }}>Sign in</Button>
