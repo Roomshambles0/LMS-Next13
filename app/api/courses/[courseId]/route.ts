@@ -5,60 +5,60 @@ import { NextResponse } from "next/server";
 import { Pclient } from "@/lib/prismadb";
 
 
-// // const { Video } = new Mux(
-// //   process.env.MUX_TOKEN_ID!,
-// //   process.env.MUX_TOKEN_SECRET!,
-// // );
+const { Video } = new Mux(
+  process.env.MUX_TOKEN_ID!,
+  process.env.MUX_TOKEN_SECRET!,
+);
 
-// const Video ={}
 
-// export async function DELETE(
-//   req: Request,
-//   { params }: { params: { courseId: string } }
-// ) {
-//   try {
-//     const teacher = await getCurrentAdmin();
 
-//     if (!teacher) {
-//       return new NextResponse("Unauthorized", { status: 401 });
-//     }
+export async function DELETE(
+  req: Request,
+  { params }: { params: { courseId: string } }
+) {
+  try {
+    const teacher = await getCurrentAdmin();
 
-//     const course = await Pclient.course.findUnique({
-//       where: {
-//         id: params.courseId,
-//         teacherId: teacher.id,
-//       },
-//       include: {
-//         chapters: {
-//           include: {
-//             muxData: true,
-//           }
-//         }
-//       }
-//     });
+    if (!teacher) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
 
-//     if (!course) {
-//       return new NextResponse("Not found", { status: 404 });
-//     }
+    const course = await Pclient.course.findUnique({
+      where: {
+        id: params.courseId,
+        teacherId: teacher.id,
+      },
+      include: {
+        chapters: {
+          include: {
+            muxData: true,
+          }
+        }
+      }
+    });
 
-//     for (const chapter of course.chapters) {
-//       if (chapter.muxData?.assetId) {
-//         await Video.Assets.del(chapter.muxData.assetId);
-//       }
-//     }
+    if (!course) {
+      return new NextResponse("Not found", { status: 404 });
+    }
 
-//     const deletedCourse = await Pclient.course.delete({
-//       where: {
-//         id: params.courseId,
-//       },
-//     });
+    for (const chapter of course.chapters) {
+      if (chapter.muxData?.assetId) {
+        await Video.Assets.del(chapter.muxData.assetId);
+      }
+    }
 
-//     return NextResponse.json(deletedCourse);
-//   } catch (error) {
-//     console.log("[COURSE_ID_DELETE]", error);
-//     return new NextResponse("Internal Error", { status: 500 });
-//   }
-// }
+    const deletedCourse = await Pclient.course.delete({
+      where: {
+        id: params.courseId,
+      },
+    });
+
+    return NextResponse.json(deletedCourse);
+  } catch (error) {
+    console.log("[COURSE_ID_DELETE]", error);
+    return new NextResponse("Internal Error", { status: 500 });
+  }
+}
 
 export async function PATCH(
   req: Request,

@@ -1,8 +1,11 @@
 import { getCurrentAdmin } from "@/app/actions/getCurrentAdmin";
 import { Pclient } from "@/lib/prismadb";
-import Mux from "@mux/mux-node";
+import Mux, { Asset } from "@mux/mux-node";
+import { error } from "console";
 
 import { NextResponse } from "next/server";
+
+
 
 
 
@@ -39,7 +42,7 @@ export async function DELETE(
         courseId: params.courseId,
       }
     });
-
+    console.log(chapter);
     if (!chapter) {
       return new NextResponse("Not Found", { status: 404 });
     }
@@ -50,16 +53,24 @@ export async function DELETE(
           chapterId: params.chapterId,
         }
       });
-
+     
       if (existingMuxData) {
-        await Video.Assets.del(existingMuxData.assetId);
-        await Pclient.muxData.delete({
-          where: {
-            id: existingMuxData.id,
+        Video.Assets.get(existingMuxData.assetId).then(
+          (responce)=>{
+          Video.Assets.del(existingMuxData.assetId)
           }
-        });
+        ).catch((error)=>{
+          console.log(error)
+        }
+        ).finally(async()=>{
+          await Pclient.muxData.delete({
+            where: {
+              id: existingMuxData.id,
+            }
+          });
+        })
+        }
       }
-    }
 
     const deletedChapter = await Pclient.chapter.delete({
       where: {
@@ -125,27 +136,39 @@ export async function PATCH(
       }
     });
 
+    console.log(chapter);
+
     if (values.videoUrl) {
       const existingMuxData = await Pclient.muxData.findFirst({
         where: {
           chapterId: params.chapterId,
         }
       });
-
+   console.log(existingMuxData);
       if (existingMuxData) {
-        await Video.Assets.del(existingMuxData.assetId);
+      Video.Assets.get(existingMuxData.assetId).then(
+        (responce)=>{
+        Video.Assets.del(existingMuxData.assetId)
+        }
+      ).catch((error)=>{
+        console.log(error)
+      }
+      ).finally(async()=>{
         await Pclient.muxData.delete({
           where: {
             id: existingMuxData.id,
           }
         });
+      })
       }
-
+          
       const asset = await Video.Assets.create({
         input: values.videoUrl,
         playback_policy: "public",
         test: false,
       });
+
+      console.log(asset);
 
       await Pclient.muxData.create({
         data: {

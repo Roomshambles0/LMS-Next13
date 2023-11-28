@@ -12,7 +12,7 @@ export default async function Dashboard() {
   const user = await getCurrentUser();
 
   if (!user) {
-    return redirect("/");
+    return redirect("/studentauth/signin");
   }
  const userId = user.id;
   const {

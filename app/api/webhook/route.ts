@@ -9,7 +9,7 @@ import { Pclient } from "@/lib/prismadb";
 export async function POST(req: Request) {
   const body = await req.text();
   const signature = headers().get("Stripe-Signature") as string;
-
+  console.log(body)
   let event: Stripe.Event;
 
   try {
