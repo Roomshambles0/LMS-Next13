@@ -1,13 +1,18 @@
+import { redirect } from "next/navigation";
+import { getCurrentAdmin } from "../actions/getCurrentAdmin";
 import { Navbar } from "./_components/Navbar";
 import { Sidebar } from "./_components/Sidebar";
+import toast from "react-hot-toast";
 
 
 
-const DashboardLayout = ({
+const DashboardLayout = async({
   children
 }: {
   children: React.ReactNode;
 }) => {
+    
+  
   return ( 
     <div className="h-full">
       <div className="w-full h-[80px] lg:pl-56 flex fixed border-b shadow-sm bg-white inset-y-0 z-50">
