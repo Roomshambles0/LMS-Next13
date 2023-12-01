@@ -1,18 +1,18 @@
 import { Pclient } from "@/lib/prismadb";
-import {getCurrentUser} from "./getCurrentUser";
+import getSession from "./getSession";
 
 
 export const getCurrentAdmin = async ()=>{
     try {
-        const user= await getCurrentUser();
-    
-        if (!user) {
+        const ssuser = await getSession();
+        
+        if (!ssuser) {
           return null;
         }
     
         const currentteacher = await Pclient.teacher.findUnique({
           where: {
-            email: user.email as string
+            email: ssuser.user?.email as string
           }
         });
     

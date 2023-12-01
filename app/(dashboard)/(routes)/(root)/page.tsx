@@ -11,33 +11,38 @@ import { getCurrentUser } from "@/app/actions/getCurrentUser";
 export default async function Dashboard() {
   const user = await getCurrentUser();
 
-  if (!user) {
-    return redirect("/studentauth/signin");
-  }
+  if(user){
  const userId = user.id;
   const {
     completedCourses,
     coursesInProgress
   } = await getDashboardCourses(userId);
 
+    if(user.role == "ADMIN"){
+      redirect ("/teacher/courses")
+    }
+  
   return (
     <div className=" mt-32 p-6 md:ml-60 space-y-4">
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-       <InfoCard
-          icon={Clock}
-          label="In Progress"
-          numberOfItems={coursesInProgress.length}
-       />
-       <InfoCard
-          icon={CheckCircle}
-          label="Completed"
-          numberOfItems={completedCourses.length}
-          variant="success"
-       />
-      </div>
-      <CoursesList
-        items={[...coursesInProgress, ...completedCourses]}
-      />
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+     <InfoCard
+        icon={Clock}
+        label="In Progress"
+        numberOfItems={coursesInProgress.length}
+     />
+     <InfoCard
+        icon={CheckCircle}
+        label="Completed"
+        numberOfItems={completedCourses.length}
+        variant="success"
+     />
     </div>
+    <CoursesList
+      items={[...coursesInProgress, ...completedCourses]}
+    />
+  </div>
   )
+  }
+   
+  
 }
