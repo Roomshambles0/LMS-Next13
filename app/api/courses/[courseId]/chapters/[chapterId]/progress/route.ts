@@ -1,5 +1,6 @@
 
 import { getCurrentAdmin } from "@/app/actions/getCurrentAdmin";
+import { getCurrentUser } from "@/app/actions/getCurrentUser";
 import { Pclient } from "@/lib/prismadb";
 import { NextResponse } from "next/server";
 
@@ -10,17 +11,17 @@ export async function PUT(
   { params }: { params: { courseId: string; chapterId: string } }
 ) {
   try {
-    const teacher = await getCurrentAdmin();
+    const user = await getCurrentUser();
     const { isCompleted } = await req.json();
-
-    if (!teacher) {
+  
+    if (!user) {
       return new NextResponse("Unauthorized", { status: 401 });
     } 
 
     const userProgress = await Pclient.userProgress.upsert({
       where: {
         userId_chapterId: {
-          userId,
+          userId:user.id,
           chapterId: params.chapterId,
         }
       },
@@ -28,7 +29,7 @@ export async function PUT(
         isCompleted
       },
       create: {
-        userId,
+        userId:user.id,
         chapterId: params.chapterId,
         isCompleted,
       }
