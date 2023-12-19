@@ -93,6 +93,15 @@ Running commands with npm `npm run [command]`
 | `dev`           | Starts a development instance of the app |
 
 
+## Future Enhancements
+
+- [ ] Add settings section where student or teacher can edit their profile info.
+- [ ] Integreate live google meet like functionality.
+- [ ] Payment gateway modifications.
+- [ ] email functionality when new chapter is released in the course.
+- [ ] ... (Add more future enhancements)
+
+
 ## Acknowledgments
 
 - Special thanks to the open-source community and the authors of the libraries used in this project.
