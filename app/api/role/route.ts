@@ -2,6 +2,8 @@ import { getCurrentUser } from "@/app/actions/getCurrentUser";
 import { Pclient } from "@/lib/prismadb";
 import { NextResponse } from "next/server";
 import { Role } from "@prisma/client";
+import { roleinput } from "@/lib/validations/roleinput";
+
 
 export async function PATCH(req:Request){
 try
@@ -13,6 +15,16 @@ try
     }
 
     const body = await req.json();
+    
+    const parsedinput = roleinput.safeParse(body);
+
+    if(!parsedinput.success)
+    {
+      return NextResponse.json({message:"send correct input"});
+    }
+
+    
+
     let role;
     if(body.type == "teacher")
     {
