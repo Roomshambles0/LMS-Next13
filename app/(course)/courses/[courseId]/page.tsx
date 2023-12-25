@@ -1,4 +1,4 @@
-;
+
 import { Pclient } from "@/lib/prismadb";
 import { redirect } from "next/navigation";
 

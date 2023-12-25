@@ -17,7 +17,7 @@ export const CourseSidebarItem = ({
   label,
   id,
   isCompleted,
-  courseId,
+  courseId,    
   isLocked,
 }: CourseSidebarItemProps) => {
   const pathname = usePathname();
